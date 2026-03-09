@@ -1,0 +1,62 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environment
+backend/venv/
+backend/.venv/
+venv/
+.venv/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# ── Node / Frontend ───────────────────────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+*.local
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# ── Editor ────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Alembic ───────────────────────────────────────────────────────────────────
+# Keep migrations tracked — do NOT ignore alembic/versions/
+
+# ── Uploads / storage ────────────────────────────────────────────────────────
+uploads/
+media/
+*.pdf
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
