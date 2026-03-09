@@ -8,15 +8,15 @@ import {
 } from 'lucide-react'
 
 export interface NavItem {
-  label: string
+  labelKey: string
   path: string
   icon: LucideIcon
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard',  path: '/dashboard',  icon: LayoutDashboard },
-  { label: 'Bookings',   path: '/bookings',   icon: CalendarDays },
-  { label: 'Customers',  path: '/customers',  icon: Users },
-  { label: 'Invoices',   path: '/invoices',   icon: FileText },
-  { label: 'Settings',   path: '/settings',   icon: Settings },
+  { labelKey: 'nav.dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { labelKey: 'nav.bookings',  path: '/bookings',  icon: CalendarDays },
+  { labelKey: 'nav.customers', path: '/customers', icon: Users },
+  { labelKey: 'nav.invoices',  path: '/invoices',  icon: FileText },
+  { labelKey: 'nav.settings',  path: '/settings',  icon: Settings },
 ]

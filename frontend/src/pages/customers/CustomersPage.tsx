@@ -1,7 +1,10 @@
+import { useTranslation } from 'react-i18next'
+
 export default function CustomersPage() {
+  const { t } = useTranslation()
   return (
     <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-center text-[var(--color-text-muted)]">
-      Customer list and CRM will appear here.
+      {t('customers.placeholder')}
     </div>
   )
 }

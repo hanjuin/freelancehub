@@ -1,0 +1,162 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "bookings": "Bookings",
+    "customers": "Customers",
+    "invoices": "Invoices",
+    "settings": "Settings"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign out",
+    "createAccount": "Create account",
+    "signingIn": "Signing in…",
+    "creatingAccount": "Creating account…",
+    "noAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "forgotPassword": "Forgot password?",
+    "email": "Email",
+    "password": "Password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "username": "Username",
+    "loginFailed": "Login failed",
+    "registrationFailed": "Registration failed"
+  },
+  "common": {
+    "loading": "Loading…",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved!",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "appearance": "Appearance",
+    "language": "Language"
+  },
+  "dashboard": {
+    "welcomeBack": "Welcome back",
+    "happeningToday": "Here's what's happening today.",
+    "todaysBookings": "Today's Bookings",
+    "pendingConfirmations": "Pending Confirmations",
+    "revenueThisMonth": "Revenue This Month",
+    "outstandingInvoices": "Outstanding Invoices",
+    "calendarPlaceholder": "Calendar and recent activity will appear here."
+  },
+  "bookings": {
+    "placeholder": "Bookings calendar and list will appear here."
+  },
+  "customers": {
+    "placeholder": "Customer list and CRM will appear here."
+  },
+  "invoices": {
+    "placeholder": "Invoice list and billing will appear here."
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Profile",
+      "services": "Services",
+      "workingHours": "Working Hours",
+      "blockedDates": "Blocked Dates"
+    },
+    "profile": {
+      "personalInfo": "Personal info",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone",
+      "businessName": "Business name",
+      "bio": "Bio",
+      "bioPlaceholder": "Tell customers about yourself...",
+      "businessCategory": "Business category",
+      "selectCategory": "— Select a category —",
+      "locationLocale": "Location & locale",
+      "addressLine1": "Address line 1",
+      "addressLine2": "Address line 2",
+      "city": "City",
+      "stateProvince": "State / Province",
+      "postcode": "Postcode",
+      "country": "Country (ISO 2)",
+      "timezone": "Timezone",
+      "currency": "Currency (ISO 3)",
+      "saveChanges": "Save changes",
+      "failedToSave": "Failed to save"
+    },
+    "services": {
+      "manageServices": "Manage the services you offer to clients.",
+      "addService": "Add service",
+      "noServices": "No services yet. Add your first service to get started.",
+      "notOnline": "Not online",
+      "editService": "Edit service",
+      "newService": "New service",
+      "name": "Name",
+      "description": "Description",
+      "durationMin": "Duration (min)",
+      "bufferMin": "Buffer (min)",
+      "priceCents": "Price (cents) — e.g. 5000 = $50.00",
+      "colourHex": "Colour (hex, optional)",
+      "active": "Active",
+      "bookableOnline": "Bookable online",
+      "saveService": "Save service",
+      "deleteConfirm": "Delete this service?",
+      "failedToSave": "Failed to save"
+    },
+    "workingHours": {
+      "setAvailability": "Set your weekly availability. Customers can only book within these hours.",
+      "open": "Open",
+      "to": "to",
+      "break": "Break:",
+      "saveHours": "Save hours",
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      }
+    },
+    "blockedDates": {
+      "blockHolidays": "Block out holidays or days off.",
+      "addBlock": "Add block",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "reason": "Reason (optional)",
+      "reasonPlaceholder": "e.g. Public holiday",
+      "adding": "Adding…",
+      "noBlockedDates": "No blocked dates."
+    }
+  },
+  "booking": {
+    "steps": {
+      "service": "Service",
+      "dateTime": "Date & Time",
+      "yourDetails": "Your Details",
+      "confirmed": "Confirmed"
+    },
+    "chooseService": "Choose a service",
+    "noServices": "No services available for booking at this time.",
+    "pickDateTime": "Pick a date & time",
+    "loadingSlots": "Loading available slots…",
+    "noSlots": "No available slots on this day. Try another date.",
+    "yourDetails": "Your details",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone (optional)",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "Anything the provider should know?",
+    "bookingInProgress": "Booking…",
+    "confirmBooking": "Confirm booking",
+    "bookingConfirmed": "Booking confirmed!",
+    "confirmationEmail": "You'll receive a confirmation email shortly.",
+    "notFound": "Not found",
+    "notFoundDesc": "This booking page doesn't exist or is no longer active.",
+    "poweredBy": "Powered by FreelanceHub",
+    "back": "Back",
+    "bookingFailed": "Booking failed. Please try again."
+  }
+}

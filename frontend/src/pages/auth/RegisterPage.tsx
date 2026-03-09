@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useTranslation } from 'react-i18next'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { useAuth } from '@/context/AuthContext'
 import { cn } from '@/utils/cn'
 
@@ -18,6 +20,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>
 
 export default function RegisterPage() {
+  const { t } = useTranslation()
   const { register: registerUser } = useAuth()
   const navigate = useNavigate()
   const [serverError, setServerError] = useState<string | null>(null)
@@ -34,7 +37,7 @@ export default function RegisterPage() {
       await registerUser(values)
       navigate('/dashboard', { replace: true })
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Registration failed')
+      setServerError(err instanceof Error ? err.message : t('auth.registrationFailed'))
     }
   }
 
@@ -50,16 +53,19 @@ export default function RegisterPage() {
     <div className="min-h-dvh flex flex-col bg-[var(--color-bg)]">
       <header className="flex items-center justify-between px-6 py-4">
         <span className="text-lg font-bold text-[var(--color-primary)]">FreelanceHub</span>
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </header>
 
       <div className="flex flex-1 items-center justify-center px-4 py-8">
         <div className="w-full max-w-sm rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-[var(--color-text)]">Create account</h1>
+          <h1 className="text-2xl font-bold text-[var(--color-text)]">{t('auth.createAccount')}</h1>
           <p className="mt-1 text-sm text-[var(--color-text-muted)]">
-            Already have an account?{' '}
+            {t('auth.alreadyHaveAccount')}{' '}
             <Link to="/login" className="text-[var(--color-primary)] font-medium hover:underline">
-              Sign in
+              {t('auth.signIn')}
             </Link>
           </p>
 
@@ -72,31 +78,31 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">First name</label>
+                <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">{t('auth.firstName')}</label>
                 <input {...register('first_name')} type="text" placeholder="Jane" autoComplete="given-name" className={inputClass(!!errors.first_name)} />
                 {errors.first_name && <p className="mt-1 text-xs text-red-500">{errors.first_name.message}</p>}
               </div>
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">Last name</label>
+                <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">{t('auth.lastName')}</label>
                 <input {...register('last_name')} type="text" placeholder="Smith" autoComplete="family-name" className={inputClass(!!errors.last_name)} />
                 {errors.last_name && <p className="mt-1 text-xs text-red-500">{errors.last_name.message}</p>}
               </div>
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">Username</label>
+              <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">{t('auth.username')}</label>
               <input {...register('username')} type="text" placeholder="janesmith" autoComplete="username" className={inputClass(!!errors.username)} />
               {errors.username && <p className="mt-1 text-xs text-red-500">{errors.username.message}</p>}
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">Email</label>
+              <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">{t('auth.email')}</label>
               <input {...register('email')} type="email" placeholder="you@example.com" autoComplete="email" className={inputClass(!!errors.email)} />
               {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">Password</label>
+              <label className="mb-1.5 block text-sm font-medium text-[var(--color-text)]">{t('auth.password')}</label>
               <input {...register('password')} type="password" placeholder="Min. 8 characters" autoComplete="new-password" className={inputClass(!!errors.password)} />
               {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
             </div>
@@ -106,7 +112,7 @@ export default function RegisterPage() {
               disabled={isSubmitting}
               className="w-full rounded-lg bg-[var(--color-primary)] py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isSubmitting ? 'Creating account…' : 'Create account'}
+              {isSubmitting ? t('auth.creatingAccount') : t('auth.createAccount')}
             </button>
           </form>
         </div>
