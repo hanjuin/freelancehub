@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(npm install)",
-      "Bash(npm install -D tailwindcss @tailwindcss/vite)",
-      "Bash(npm install react-router-dom @tanstack/react-query react-hook-form zod @hookform/resolvers lucide-react clsx tailwind-merge)"
-    ]
-  }
-}
