@@ -47,7 +47,46 @@
     "calendarPlaceholder": "日历和最近活动将在此显示。"
   },
   "bookings": {
-    "placeholder": "预约日历和列表将在此显示。"
+    "title": "预约",
+    "subtitle": "管理您的预约和日程安排。",
+    "newBooking": "新建预约",
+    "calendarView": "日历",
+    "listView": "列表",
+    "today": "今天",
+    "view": {
+      "day": "日",
+      "week": "周",
+      "month": "月"
+    },
+    "customer": "客户",
+    "service": "服务",
+    "dateTime": "日期和时间",
+    "duration": "时长",
+    "status": "状态",
+    "price": "价格",
+    "customerNotes": "客户备注",
+    "internalNotes": "内部备注",
+    "noNotes": "暂无备注",
+    "cancellationReason": "取消原因",
+    "bookingDetail": "预约详情",
+    "allServices": "所有服务",
+    "searchPlaceholder": "搜索客户…",
+    "noBookings": "未找到预约。",
+    "loadError": "加载预约失败。",
+    "actionFailed": "操作失败，请重试。",
+    "pageOf": "第 {{page}} 页，共 {{pages}} 页（共 {{total}} 条）",
+    "form": {
+      "title": "手动创建预约",
+      "searchCustomer": "按姓名或邮箱搜索客户…",
+      "selectService": "— 选择服务 —",
+      "notes": "备注（可选）",
+      "notesPlaceholder": "此预约的任何备注…",
+      "createBooking": "创建预约",
+      "creating": "创建中…",
+      "errorNoCustomer": "请选择客户。",
+      "errorNoService": "请选择服务。",
+      "errorNoTime": "请选择日期和时间。"
+    }
   },
   "customers": {
     "placeholder": "客户列表和CRM将在此显示。"
@@ -80,6 +119,7 @@
       "postcode": "邮政编码",
       "country": "国家 (ISO 2)",
       "timezone": "时区",
+      "selectTimezone": "选择时区...",
       "currency": "货币 (ISO 3)",
       "saveChanges": "保存更改",
       "failedToSave": "保存失败"

@@ -22,14 +22,17 @@ function formatDuration(mins: number): string {
   const m = mins % 60
   return m > 0 ? `${h}h ${m}m` : `${h}h`
 }
-function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true })
+function formatTime(iso: string, tz?: string): string {
+  return new Date(iso).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: tz })
 }
-function formatDateFull(d: Date): string {
-  return d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+function formatDateFull(d: Date, tz?: string): string {
+  return d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: tz })
 }
 function toDateStr(d: Date): string {
-  return d.toISOString().slice(0, 10)
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
 }
 
 const inputCls = 'w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition'
@@ -134,11 +137,13 @@ function ServiceStep({
 function DateTimeStep({
   username,
   service,
+  freelancerTz,
   onSelect,
   onBack,
 }: {
   username: string
   service: Service
+  freelancerTz: string
   onSelect: (slot: AvailableSlot) => void
   onBack: () => void
 }) {
@@ -231,7 +236,7 @@ function DateTimeStep({
         <div>
           <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
             <Clock size={14} className="text-indigo-500" />
-            {formatDateFull(selectedDate)}
+            {formatDateFull(selectedDate, freelancerTz)}
           </p>
           {loadingSlots ? (
             <p className="text-sm text-gray-400">{t('booking.loadingSlots')}</p>
@@ -245,7 +250,7 @@ function DateTimeStep({
                   onClick={() => onSelect(slot)}
                   className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200 hover:border-indigo-400 hover:text-indigo-600 transition"
                 >
-                  {formatTime(slot.start_time)}
+                  {formatTime(slot.start_time, freelancerTz)}
                 </button>
               ))}
             </div>
@@ -271,6 +276,7 @@ function DetailsStep({
   service,
   slot,
   currency,
+  freelancerTz,
   onSubmit,
   onBack,
   submitting,
@@ -279,6 +285,7 @@ function DetailsStep({
   service: Service
   slot: AvailableSlot
   currency: string
+  freelancerTz: string
   onSubmit: (values: DetailsForm) => void
   onBack: () => void
   submitting: boolean
@@ -299,10 +306,10 @@ function DetailsStep({
       {/* Booking summary */}
       <div className="rounded-xl border border-indigo-100 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/30 p-4 space-y-1">
         <div className="flex items-center gap-2 text-sm text-indigo-800 dark:text-indigo-200">
-          <Calendar size={14} /> {formatDateFull(new Date(slot.start_time))}
+          <Calendar size={14} /> {formatDateFull(new Date(slot.start_time), freelancerTz)}
         </div>
         <div className="flex items-center gap-2 text-sm text-indigo-800 dark:text-indigo-200">
-          <Clock size={14} /> {formatTime(slot.start_time)} · {formatDuration(service.duration_minutes)}
+          <Clock size={14} /> {formatTime(slot.start_time, freelancerTz)} · {formatDuration(service.duration_minutes)}
         </div>
         <div className="flex items-center gap-2 text-sm text-indigo-800 dark:text-indigo-200">
           <User size={14} /> {service.name} · {formatPrice(service.price_cents, currency)}
@@ -359,10 +366,12 @@ function ConfirmedStep({
   service,
   slot,
   currency,
+  freelancerTz,
 }: {
   service: Service
   slot: AvailableSlot
   currency: string
+  freelancerTz: string
 }) {
   const { t } = useTranslation()
 
@@ -380,10 +389,10 @@ function ConfirmedStep({
           <User size={14} className="text-indigo-500" /> {service.name}
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-          <Calendar size={14} className="text-indigo-500" /> {formatDateFull(new Date(slot.start_time))}
+          <Calendar size={14} className="text-indigo-500" /> {formatDateFull(new Date(slot.start_time), freelancerTz)}
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-          <Clock size={14} className="text-indigo-500" /> {formatTime(slot.start_time)} · {formatDuration(service.duration_minutes)}
+          <Clock size={14} className="text-indigo-500" /> {formatTime(slot.start_time, freelancerTz)} · {formatDuration(service.duration_minutes)}
         </div>
         <p className="pt-1 text-sm font-semibold text-gray-900 dark:text-white">
           {formatPrice(service.price_cents, currency)}
@@ -519,6 +528,7 @@ export default function BookingPage() {
             <DateTimeStep
               username={profile.username}
               service={service}
+              freelancerTz={profile.timezone}
               onSelect={handleSelectSlot}
               onBack={() => setStep(0)}
             />
@@ -528,6 +538,7 @@ export default function BookingPage() {
               service={service}
               slot={slot}
               currency={profile.currency}
+              freelancerTz={profile.timezone}
               onSubmit={handleSubmitDetails}
               onBack={() => setStep(1)}
               submitting={submitting}
@@ -539,6 +550,7 @@ export default function BookingPage() {
               service={service}
               slot={slot}
               currency={profile.currency}
+              freelancerTz={profile.timezone}
             />
           )}
         </div>

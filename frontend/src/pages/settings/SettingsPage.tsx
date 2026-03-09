@@ -23,6 +23,103 @@ const btnPrimary = 'rounded-lg bg-[var(--color-primary)] px-4 py-2 text-sm font-
 const btnSecondary = 'rounded-lg border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-surface-raised)] transition'
 
 const DAYS: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+// Common IANA timezones grouped by region
+const TIMEZONE_GROUPS: { label: string; zones: { value: string; label: string }[] }[] = [
+  {
+    label: 'Pacific',
+    zones: [
+      { value: 'Pacific/Auckland',  label: 'Auckland (UTC+12/+13)' },
+      { value: 'Pacific/Fiji',      label: 'Fiji (UTC+12)' },
+      { value: 'Pacific/Honolulu',  label: 'Honolulu (UTC-10)' },
+      { value: 'Pacific/Apia',      label: 'Apia (UTC+13)' },
+      { value: 'Pacific/Tongatapu', label: 'Tongatapu (UTC+13)' },
+    ],
+  },
+  {
+    label: 'Australia',
+    zones: [
+      { value: 'Australia/Sydney',   label: 'Sydney / Melbourne (UTC+10/+11)' },
+      { value: 'Australia/Brisbane', label: 'Brisbane (UTC+10)' },
+      { value: 'Australia/Adelaide', label: 'Adelaide (UTC+9:30/+10:30)' },
+      { value: 'Australia/Perth',    label: 'Perth (UTC+8)' },
+      { value: 'Australia/Darwin',   label: 'Darwin (UTC+9:30)' },
+      { value: 'Australia/Hobart',   label: 'Hobart (UTC+10/+11)' },
+    ],
+  },
+  {
+    label: 'Asia',
+    zones: [
+      { value: 'Asia/Shanghai',     label: 'Beijing / Shanghai (UTC+8)' },
+      { value: 'Asia/Hong_Kong',    label: 'Hong Kong (UTC+8)' },
+      { value: 'Asia/Taipei',       label: 'Taipei (UTC+8)' },
+      { value: 'Asia/Singapore',    label: 'Singapore (UTC+8)' },
+      { value: 'Asia/Kuala_Lumpur', label: 'Kuala Lumpur (UTC+8)' },
+      { value: 'Asia/Manila',       label: 'Manila (UTC+8)' },
+      { value: 'Asia/Tokyo',        label: 'Tokyo (UTC+9)' },
+      { value: 'Asia/Seoul',        label: 'Seoul (UTC+9)' },
+      { value: 'Asia/Jakarta',      label: 'Jakarta (UTC+7)' },
+      { value: 'Asia/Bangkok',      label: 'Bangkok (UTC+7)' },
+      { value: 'Asia/Ho_Chi_Minh',  label: 'Ho Chi Minh City (UTC+7)' },
+      { value: 'Asia/Kolkata',      label: 'Kolkata / Mumbai (UTC+5:30)' },
+      { value: 'Asia/Karachi',      label: 'Karachi (UTC+5)' },
+      { value: 'Asia/Dubai',        label: 'Dubai (UTC+4)' },
+      { value: 'Asia/Riyadh',       label: 'Riyadh (UTC+3)' },
+      { value: 'Asia/Baghdad',      label: 'Baghdad (UTC+3)' },
+      { value: 'Asia/Tehran',       label: 'Tehran (UTC+3:30)' },
+      { value: 'Asia/Jerusalem',    label: 'Jerusalem (UTC+2/+3)' },
+    ],
+  },
+  {
+    label: 'Europe',
+    zones: [
+      { value: 'Europe/London',    label: 'London (UTC+0/+1)' },
+      { value: 'Europe/Dublin',    label: 'Dublin (UTC+0/+1)' },
+      { value: 'Europe/Lisbon',    label: 'Lisbon (UTC+0/+1)' },
+      { value: 'Europe/Paris',     label: 'Paris / Berlin / Rome (UTC+1/+2)' },
+      { value: 'Europe/Amsterdam', label: 'Amsterdam (UTC+1/+2)' },
+      { value: 'Europe/Madrid',    label: 'Madrid (UTC+1/+2)' },
+      { value: 'Europe/Zurich',    label: 'Zurich (UTC+1/+2)' },
+      { value: 'Europe/Warsaw',    label: 'Warsaw (UTC+1/+2)' },
+      { value: 'Europe/Athens',    label: 'Athens (UTC+2/+3)' },
+      { value: 'Europe/Helsinki',  label: 'Helsinki (UTC+2/+3)' },
+      { value: 'Europe/Istanbul',  label: 'Istanbul (UTC+3)' },
+      { value: 'Europe/Moscow',    label: 'Moscow (UTC+3)' },
+    ],
+  },
+  {
+    label: 'Africa',
+    zones: [
+      { value: 'Africa/Johannesburg', label: 'Johannesburg (UTC+2)' },
+      { value: 'Africa/Cairo',        label: 'Cairo (UTC+2)' },
+      { value: 'Africa/Lagos',        label: 'Lagos (UTC+1)' },
+      { value: 'Africa/Nairobi',      label: 'Nairobi (UTC+3)' },
+    ],
+  },
+  {
+    label: 'Americas',
+    zones: [
+      { value: 'America/New_York',    label: 'New York (UTC-5/-4)' },
+      { value: 'America/Chicago',     label: 'Chicago (UTC-6/-5)' },
+      { value: 'America/Denver',      label: 'Denver (UTC-7/-6)' },
+      { value: 'America/Los_Angeles', label: 'Los Angeles (UTC-8/-7)' },
+      { value: 'America/Anchorage',   label: 'Anchorage (UTC-9/-8)' },
+      { value: 'America/Toronto',     label: 'Toronto (UTC-5/-4)' },
+      { value: 'America/Vancouver',   label: 'Vancouver (UTC-8/-7)' },
+      { value: 'America/Sao_Paulo',   label: 'São Paulo (UTC-3/-2)' },
+      { value: 'America/Argentina/Buenos_Aires', label: 'Buenos Aires (UTC-3)' },
+      { value: 'America/Santiago',    label: 'Santiago (UTC-4/-3)' },
+      { value: 'America/Bogota',      label: 'Bogota (UTC-5)' },
+      { value: 'America/Mexico_City', label: 'Mexico City (UTC-6/-5)' },
+    ],
+  },
+  {
+    label: 'UTC',
+    zones: [
+      { value: 'UTC', label: 'UTC (UTC+0)' },
+    ],
+  },
+]
+
 
 function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`
@@ -186,7 +283,17 @@ function ProfileTab() {
           </div>
           <div>
             <label className={labelCls}>{t('settings.profile.timezone')}</label>
-            <input {...register('timezone')} className={inputCls} placeholder="Australia/Sydney" />
+            <select {...register('timezone')} className={inputCls}>
+              <option value="">{t('settings.profile.selectTimezone')}</option>
+              {TIMEZONE_GROUPS.map(group => (
+                <optgroup key={group.label} label={group.label}>
+                  {group.zones.map(z => (
+                    <option key={z.value} value={z.value}>{z.label}</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+            {errors.timezone && <p className="mt-1 text-xs text-red-500">{errors.timezone.message}</p>}
           </div>
           <div>
             <label className={labelCls}>{t('settings.profile.currency')}</label>

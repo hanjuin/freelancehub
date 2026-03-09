@@ -32,6 +32,26 @@ class BookingUpdate(BaseModel):
     staff_member_id: uuid.UUID | None = None
 
 
+class CustomerSummary(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    first_name: str
+    last_name: str | None
+    email: str | None
+    phone: str | None
+
+
+class ServiceSummary(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    name: str
+    color: str | None
+    duration_minutes: int
+    price_cents: int
+
+
 class BookingResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -55,6 +75,8 @@ class BookingResponse(BaseModel):
     reminder_2h_sent: bool
     created_at: datetime
     updated_at: datetime
+    customer: CustomerSummary | None = None
+    service: ServiceSummary | None = None
 
 
 class BookingStatusUpdate(BaseModel):

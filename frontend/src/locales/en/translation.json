@@ -47,7 +47,46 @@
     "calendarPlaceholder": "Calendar and recent activity will appear here."
   },
   "bookings": {
-    "placeholder": "Bookings calendar and list will appear here."
+    "title": "Bookings",
+    "subtitle": "Manage your appointments and schedule.",
+    "newBooking": "New booking",
+    "calendarView": "Calendar",
+    "listView": "List",
+    "today": "Today",
+    "view": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month"
+    },
+    "customer": "Customer",
+    "service": "Service",
+    "dateTime": "Date & Time",
+    "duration": "Duration",
+    "status": "Status",
+    "price": "Price",
+    "customerNotes": "Customer notes",
+    "internalNotes": "Internal notes",
+    "noNotes": "No notes",
+    "cancellationReason": "Cancellation reason",
+    "bookingDetail": "Booking detail",
+    "allServices": "All services",
+    "searchPlaceholder": "Search customer…",
+    "noBookings": "No bookings found.",
+    "loadError": "Failed to load bookings.",
+    "actionFailed": "Action failed. Please try again.",
+    "pageOf": "Page {{page}} of {{pages}} ({{total}} total)",
+    "form": {
+      "title": "New manual booking",
+      "searchCustomer": "Search customer by name or email…",
+      "selectService": "— Select a service —",
+      "notes": "Notes (optional)",
+      "notesPlaceholder": "Any notes for this booking…",
+      "createBooking": "Create booking",
+      "creating": "Creating…",
+      "errorNoCustomer": "Please select a customer.",
+      "errorNoService": "Please select a service.",
+      "errorNoTime": "Please select a date and time."
+    }
   },
   "customers": {
     "placeholder": "Customer list and CRM will appear here."
@@ -80,6 +119,7 @@
       "postcode": "Postcode",
       "country": "Country (ISO 2)",
       "timezone": "Timezone",
+      "selectTimezone": "Select timezone...",
       "currency": "Currency (ISO 3)",
       "saveChanges": "Save changes",
       "failedToSave": "Failed to save"

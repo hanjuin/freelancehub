@@ -14,12 +14,14 @@ from models import (  # noqa: E402
     Booking,
     BookingCustomAnswer,
     BookingStatus,
+    Customer,
     RecurringBookingRule,
     WaitlistEntry,
 )
 
 from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.crud.base import CRUDBase
 from app.schemas.booking import (
@@ -42,6 +44,8 @@ class CRUDBooking(CRUDBase[Booking, BookingCreate, BookingUpdate]):
         from_date: datetime | None = None,
         to_date: datetime | None = None,
         customer_id: uuid.UUID | None = None,
+        service_id: uuid.UUID | None = None,
+        search: str | None = None,
     ) -> tuple[list[Booking], int]:
         stmt = select(Booking).where(Booking.freelancer_id == freelancer_id)
         if status is not None:
@@ -52,12 +56,26 @@ class CRUDBooking(CRUDBase[Booking, BookingCreate, BookingUpdate]):
             stmt = stmt.where(Booking.start_time <= to_date)
         if customer_id is not None:
             stmt = stmt.where(Booking.customer_id == customer_id)
+        if service_id is not None:
+            stmt = stmt.where(Booking.service_id == service_id)
+        if search is not None:
+            search_term = f"%{search}%"
+            stmt = stmt.join(Booking.customer).where(
+                Customer.first_name.ilike(search_term)
+                | Customer.last_name.ilike(search_term)
+                | Customer.email.ilike(search_term)
+            )
 
         count_stmt = select(func.count()).select_from(stmt.subquery())
         count_result = await db.execute(count_stmt)
         total = count_result.scalar_one()
 
-        stmt = stmt.order_by(Booking.start_time.desc()).offset(skip).limit(limit)
+        stmt = (
+            stmt.order_by(Booking.start_time.desc())
+            .offset(skip)
+            .limit(limit)
+            .options(selectinload(Booking.customer), selectinload(Booking.service))
+        )
         result = await db.execute(stmt)
         return list(result.scalars().all()), total
 
@@ -65,10 +83,12 @@ class CRUDBooking(CRUDBase[Booking, BookingCreate, BookingUpdate]):
         self, db: AsyncSession, freelancer_id: uuid.UUID, id: uuid.UUID
     ) -> Booking | None:
         result = await db.execute(
-            select(Booking).where(
+            select(Booking)
+            .where(
                 Booking.freelancer_id == freelancer_id,
                 Booking.id == id,
             )
+            .options(selectinload(Booking.customer), selectinload(Booking.service))
         )
         return result.scalar_one_or_none()
 

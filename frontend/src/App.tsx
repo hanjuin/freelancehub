@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { AuthProvider } from '@/context/AuthContext'
 import { AppLayout } from '@/components/layout/AppLayout'
@@ -13,32 +14,38 @@ import CustomersPage from '@/pages/customers/CustomersPage'
 import InvoicesPage from '@/pages/invoices/InvoicesPage'
 import SettingsPage from '@/pages/settings/SettingsPage'
 
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
+})
+
 export default function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Public */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/book/:username" element={<BookingPage />} />
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Public */}
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/book/:username" element={<BookingPage />} />
 
-            {/* Protected — renders loading spinner or redirects to /login */}
-            <Route element={<ProtectedRoute />}>
-              <Route element={<AppLayout />}>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/bookings" element={<BookingsPage />} />
-                <Route path="/customers" element={<CustomersPage />} />
-                <Route path="/invoices" element={<InvoicesPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
+              {/* Protected — renders loading spinner or redirects to /login */}
+              <Route element={<ProtectedRoute />}>
+                <Route element={<AppLayout />}>
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/bookings" element={<BookingsPage />} />
+                  <Route path="/customers" element={<CustomersPage />} />
+                  <Route path="/invoices" element={<InvoicesPage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                </Route>
               </Route>
-            </Route>
 
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   )
 }
