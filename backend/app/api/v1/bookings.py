@@ -98,6 +98,8 @@ async def list_bookings(
     from_date: datetime | None = Query(default=None),
     to_date: datetime | None = Query(default=None),
     customer_id: uuid.UUID | None = Query(default=None),
+    service_id: uuid.UUID | None = Query(default=None),
+    search: str | None = Query(default=None),
     db: AsyncSession = Depends(get_db),
     current_freelancer: Freelancer = Depends(get_current_active_freelancer),
 ) -> PaginatedResponse[BookingResponse]:
@@ -111,6 +113,8 @@ async def list_bookings(
         from_date=from_date,
         to_date=to_date,
         customer_id=customer_id,
+        service_id=service_id,
+        search=search,
     )
     pages = max(1, (total + page_size - 1) // page_size)
     return PaginatedResponse(

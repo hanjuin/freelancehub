@@ -8,6 +8,7 @@ NOTE: In production, apply rate limiting (e.g., slowapi) to all endpoints here.
 import sys
 import uuid
 from datetime import date, datetime, time, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from pathlib import Path
 
 _PROJECT_ROOT = str(Path(__file__).resolve().parents[4])
@@ -138,17 +139,22 @@ def _compute_slots(
         if bd.all_day and bd.start_date <= target_date <= bd.end_date:
             return []
 
-    slot_duration = timedelta(minutes=duration_minutes + buffer_minutes)
+    # Interpret working hours in the freelancer's local timezone so that
+    # "9:00 AM" means 9:00 AM where the freelancer is, not 9:00 AM UTC.
+    try:
+        tz = ZoneInfo(freelancer_tz)
+    except (ZoneInfoNotFoundError, Exception):
+        tz = timezone.utc
 
-    open_dt = datetime.combine(target_date, working_hours.open_time, tzinfo=timezone.utc)
-    close_dt = datetime.combine(target_date, working_hours.close_time, tzinfo=timezone.utc)
+    open_dt = datetime.combine(target_date, working_hours.open_time, tzinfo=tz)
+    close_dt = datetime.combine(target_date, working_hours.close_time, tzinfo=tz)
 
     # Break window
     break_start_dt: datetime | None = None
     break_end_dt: datetime | None = None
     if working_hours.break_start and working_hours.break_end:
-        break_start_dt = datetime.combine(target_date, working_hours.break_start, tzinfo=timezone.utc)
-        break_end_dt = datetime.combine(target_date, working_hours.break_end, tzinfo=timezone.utc)
+        break_start_dt = datetime.combine(target_date, working_hours.break_start, tzinfo=tz)
+        break_end_dt = datetime.combine(target_date, working_hours.break_end, tzinfo=tz)
 
     slots: list[AvailableSlot] = []
     current = open_dt
@@ -169,10 +175,10 @@ def _compute_slots(
             if bd.start_date <= target_date <= bd.end_date:
                 if not bd.all_day and bd.block_start_time and bd.block_end_time:
                     block_start = datetime.combine(
-                        target_date, bd.block_start_time, tzinfo=timezone.utc
+                        target_date, bd.block_start_time, tzinfo=tz
                     )
                     block_end = datetime.combine(
-                        target_date, bd.block_end_time, tzinfo=timezone.utc
+                        target_date, bd.block_end_time, tzinfo=tz
                     )
                     if current < block_end and slot_end > block_start:
                         skip = True
@@ -181,7 +187,7 @@ def _compute_slots(
             current += step
             continue
 
-        # Skip if overlaps existing booking
+        # Skip if overlaps existing booking (stored in UTC — Python compares tz-aware datetimes correctly)
         conflict = False
         for booking in existing_bookings:
             if booking.start_time < slot_end and booking.end_time > current:
@@ -233,13 +239,13 @@ async def get_available_slots(
         return []
 
     # Get working hours for this day
-    day_name = date.strftime("%A").upper()  # e.g. "MONDAY"
+    day_name = date.strftime("%A").lower()  # e.g. "monday" — matches DayOfWeek enum values
     wh_list = await crud_working_hours.get_by_freelancer(
         db, freelancer.id, staff_member_id=staff_member_id
     )
     wh: WorkingHours | None = None
     for h in wh_list:
-        if h.day_of_week.value == day_name or h.day_of_week == day_name:
+        if h.day_of_week.value == day_name:
             wh = h
             break
     if not wh:
