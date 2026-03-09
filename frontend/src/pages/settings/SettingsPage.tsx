@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Plus, Trash2, Pencil, X, Check } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { profileApi } from '@/api/profile'
 import { servicesApi } from '@/api/services'
 import { availabilityApi } from '@/api/availability'
@@ -13,7 +14,7 @@ import type { WorkingHours, WorkingHoursCreate, BlockedDate, DayOfWeek } from '@
 
 // ── Shared ───────────────────────────────────────────────────────────────────
 
-const TABS = ['Profile', 'Services', 'Working Hours', 'Blocked Dates'] as const
+const TABS = ['profile', 'services', 'workingHours', 'blockedDates'] as const
 type Tab = typeof TABS[number]
 
 const inputCls = 'w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-subtle)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] transition'
@@ -22,10 +23,6 @@ const btnPrimary = 'rounded-lg bg-[var(--color-primary)] px-4 py-2 text-sm font-
 const btnSecondary = 'rounded-lg border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-surface-raised)] transition'
 
 const DAYS: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-const DAY_LABELS: Record<DayOfWeek, string> = {
-  monday: 'Monday', tuesday: 'Tuesday', wednesday: 'Wednesday',
-  thursday: 'Thursday', friday: 'Friday', saturday: 'Saturday', sunday: 'Sunday',
-}
 
 function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`
@@ -57,6 +54,7 @@ const profileSchema = z.object({
 type ProfileForm = z.infer<typeof profileSchema>
 
 function ProfileTab() {
+  const { t } = useTranslation()
   const { user, refreshUser } = useAuth()
   const [categories, setCategories] = useState<ServiceCategory[]>([])
   const [catId, setCatId] = useState<string>('')
@@ -103,7 +101,7 @@ function ProfileTab() {
       setSaved(true)
       setTimeout(() => setSaved(false), 2500)
     } catch (e) {
-      setServerErr(e instanceof Error ? e.message : 'Failed to save')
+      setServerErr(e instanceof Error ? e.message : t('settings.profile.failedToSave'))
     }
   }
 
@@ -116,42 +114,42 @@ function ProfileTab() {
       )}
 
       <div>
-        <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Personal info</h3>
+        <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">{t('settings.profile.personalInfo')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={labelCls}>First name</label>
+            <label className={labelCls}>{t('settings.profile.firstName')}</label>
             <input {...register('first_name')} className={inputCls} />
             {errors.first_name && <p className="mt-1 text-xs text-red-500">{errors.first_name.message}</p>}
           </div>
           <div>
-            <label className={labelCls}>Last name</label>
+            <label className={labelCls}>{t('settings.profile.lastName')}</label>
             <input {...register('last_name')} className={inputCls} />
             {errors.last_name && <p className="mt-1 text-xs text-red-500">{errors.last_name.message}</p>}
           </div>
           <div>
-            <label className={labelCls}>Phone</label>
+            <label className={labelCls}>{t('settings.profile.phone')}</label>
             <input {...register('phone')} className={inputCls} placeholder="+61 400 000 000" />
           </div>
           <div>
-            <label className={labelCls}>Business name</label>
+            <label className={labelCls}>{t('settings.profile.businessName')}</label>
             <input {...register('business_name')} className={inputCls} />
           </div>
         </div>
         <div className="mt-4">
-          <label className={labelCls}>Bio</label>
+          <label className={labelCls}>{t('settings.profile.bio')}</label>
           <textarea
             {...register('bio')}
             rows={3}
             className={inputCls + ' resize-none'}
-            placeholder="Tell customers about yourself..."
+            placeholder={t('settings.profile.bioPlaceholder')}
           />
         </div>
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Business category</h3>
+        <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">{t('settings.profile.businessCategory')}</h3>
         <select value={catId} onChange={e => setCatId(e.target.value)} className={inputCls}>
-          <option value="">— Select a category —</option>
+          <option value="">{t('settings.profile.selectCategory')}</option>
           {categories.map(c => (
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
@@ -159,39 +157,39 @@ function ProfileTab() {
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">Location &amp; locale</h3>
+        <h3 className="text-sm font-semibold text-[var(--color-text)] mb-4">{t('settings.profile.locationLocale')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className={labelCls}>Address line 1</label>
+            <label className={labelCls}>{t('settings.profile.addressLine1')}</label>
             <input {...register('address_line1')} className={inputCls} />
           </div>
           <div className="sm:col-span-2">
-            <label className={labelCls}>Address line 2</label>
+            <label className={labelCls}>{t('settings.profile.addressLine2')}</label>
             <input {...register('address_line2')} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>City</label>
+            <label className={labelCls}>{t('settings.profile.city')}</label>
             <input {...register('city')} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>State / Province</label>
+            <label className={labelCls}>{t('settings.profile.stateProvince')}</label>
             <input {...register('state')} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>Postcode</label>
+            <label className={labelCls}>{t('settings.profile.postcode')}</label>
             <input {...register('postcode')} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>Country (ISO 2)</label>
+            <label className={labelCls}>{t('settings.profile.country')}</label>
             <input {...register('country')} className={inputCls} maxLength={2} placeholder="AU" />
             {errors.country && <p className="mt-1 text-xs text-red-500">{errors.country.message}</p>}
           </div>
           <div>
-            <label className={labelCls}>Timezone</label>
+            <label className={labelCls}>{t('settings.profile.timezone')}</label>
             <input {...register('timezone')} className={inputCls} placeholder="Australia/Sydney" />
           </div>
           <div>
-            <label className={labelCls}>Currency (ISO 3)</label>
+            <label className={labelCls}>{t('settings.profile.currency')}</label>
             <input {...register('currency')} className={inputCls} maxLength={3} placeholder="AUD" />
           </div>
         </div>
@@ -199,11 +197,11 @@ function ProfileTab() {
 
       <div className="flex items-center gap-3">
         <button type="submit" disabled={isSubmitting} className={btnPrimary}>
-          {isSubmitting ? 'Saving…' : 'Save changes'}
+          {isSubmitting ? t('common.saving') : t('settings.profile.saveChanges')}
         </button>
         {saved && (
           <span className="flex items-center gap-1 text-sm text-green-600">
-            <Check size={14} /> Saved!
+            <Check size={14} /> {t('common.saved')}
           </span>
         )}
       </div>
@@ -234,6 +232,7 @@ function ServiceModal({
   onClose: () => void
   onSaved: () => void
 }) {
+  const { t } = useTranslation()
   const [serverErr, setServerErr] = useState<string | null>(null)
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ServiceForm>({
     resolver: zodResolver(serviceSchema),
@@ -265,7 +264,7 @@ function ServiceModal({
       }
       onSaved()
     } catch (e) {
-      setServerErr(e instanceof Error ? e.message : 'Failed to save')
+      setServerErr(e instanceof Error ? e.message : t('settings.services.failedToSave'))
     }
   }
 
@@ -280,7 +279,7 @@ function ServiceModal({
       >
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-base font-semibold text-[var(--color-text)]">
-            {service ? 'Edit service' : 'New service'}
+            {service ? t('settings.services.editService') : t('settings.services.newService')}
           </h2>
           <button onClick={onClose} className="text-[var(--color-text-muted)] hover:text-[var(--color-text)]">
             <X size={18} />
@@ -295,53 +294,53 @@ function ServiceModal({
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <div>
-            <label className={labelCls}>Name</label>
+            <label className={labelCls}>{t('settings.services.name')}</label>
             <input {...register('name')} className={inputCls} />
             {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
           </div>
           <div>
-            <label className={labelCls}>Description</label>
+            <label className={labelCls}>{t('settings.services.description')}</label>
             <textarea {...register('description')} rows={2} className={inputCls + ' resize-none'} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={labelCls}>Duration (min)</label>
+              <label className={labelCls}>{t('settings.services.durationMin')}</label>
               <input {...register('duration_minutes')} type="number" min={1} className={inputCls} />
               {errors.duration_minutes && (
                 <p className="mt-1 text-xs text-red-500">{errors.duration_minutes.message}</p>
               )}
             </div>
             <div>
-              <label className={labelCls}>Buffer (min)</label>
+              <label className={labelCls}>{t('settings.services.bufferMin')}</label>
               <input {...register('buffer_minutes')} type="number" min={0} className={inputCls} />
             </div>
           </div>
           <div>
-            <label className={labelCls}>Price (cents) — e.g. 5000 = $50.00</label>
+            <label className={labelCls}>{t('settings.services.priceCents')}</label>
             <input {...register('price_cents')} type="number" min={0} className={inputCls} />
             {errors.price_cents && (
               <p className="mt-1 text-xs text-red-500">{errors.price_cents.message}</p>
             )}
           </div>
           <div>
-            <label className={labelCls}>Colour (hex, optional)</label>
+            <label className={labelCls}>{t('settings.services.colourHex')}</label>
             <input {...register('color')} className={inputCls} placeholder="#6366f1" maxLength={7} />
           </div>
           <div className="flex items-center gap-4 pt-1">
             <label className="flex items-center gap-2 text-sm text-[var(--color-text)]">
               <input {...register('is_active')} type="checkbox" />
-              Active
+              {t('settings.services.active')}
             </label>
             <label className="flex items-center gap-2 text-sm text-[var(--color-text)]">
               <input {...register('is_bookable_online')} type="checkbox" />
-              Bookable online
+              {t('settings.services.bookableOnline')}
             </label>
           </div>
           <div className="flex gap-3 pt-2">
             <button type="submit" disabled={isSubmitting} className={btnPrimary}>
-              {isSubmitting ? 'Saving…' : 'Save service'}
+              {isSubmitting ? t('common.saving') : t('settings.services.saveService')}
             </button>
-            <button type="button" onClick={onClose} className={btnSecondary}>Cancel</button>
+            <button type="button" onClick={onClose} className={btnSecondary}>{t('common.cancel')}</button>
           </div>
         </form>
       </div>
@@ -350,6 +349,7 @@ function ServiceModal({
 }
 
 function ServicesTab() {
+  const { t } = useTranslation()
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
   const [editTarget, setEditTarget] = useState<Service | null | undefined>(undefined)
@@ -369,7 +369,7 @@ function ServicesTab() {
   useEffect(() => { load() }, [])
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this service?')) return
+    if (!confirm(t('settings.services.deleteConfirm'))) return
     await servicesApi.delete(id).catch(() => {})
     load()
   }
@@ -377,17 +377,17 @@ function ServicesTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[var(--color-text-muted)]">Manage the services you offer to clients.</p>
+        <p className="text-sm text-[var(--color-text-muted)]">{t('settings.services.manageServices')}</p>
         <button onClick={() => setEditTarget(null)} className={btnPrimary + ' flex items-center gap-1.5'}>
-          <Plus size={15} /> Add service
+          <Plus size={15} /> {t('settings.services.addService')}
         </button>
       </div>
 
       {loading ? (
-        <p className="text-sm text-[var(--color-text-muted)]">Loading…</p>
+        <p className="text-sm text-[var(--color-text-muted)]">{t('common.loading')}</p>
       ) : services.length === 0 ? (
         <div className="rounded-xl border border-dashed border-[var(--color-border)] p-10 text-center text-[var(--color-text-muted)] text-sm">
-          No services yet. Add your first service to get started.
+          {t('settings.services.noServices')}
         </div>
       ) : (
         <div className="space-y-2">
@@ -407,7 +407,7 @@ function ServicesTab() {
                   <p className="text-sm font-medium text-[var(--color-text)] truncate">{s.name}</p>
                   <p className="text-xs text-[var(--color-text-muted)]">
                     {formatDuration(s.duration_minutes)} · {formatPrice(s.price_cents)}
-                    {!s.is_bookable_online && ' · Not online'}
+                    {!s.is_bookable_online && ` · ${t('settings.services.notOnline')}`}
                   </p>
                 </div>
               </div>
@@ -446,6 +446,7 @@ function ServicesTab() {
 type DayRow = WorkingHoursCreate & { changed: boolean }
 
 function WorkingHoursTab() {
+  const { t } = useTranslation()
   const [rows, setRows] = useState<DayRow[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -496,12 +497,12 @@ function WorkingHoursTab() {
     }
   }
 
-  if (loading) return <p className="text-sm text-[var(--color-text-muted)]">Loading…</p>
+  if (loading) return <p className="text-sm text-[var(--color-text-muted)]">{t('common.loading')}</p>
 
   return (
     <div className="space-y-4 max-w-2xl">
       <p className="text-sm text-[var(--color-text-muted)]">
-        Set your weekly availability. Customers can only book within these hours.
+        {t('settings.workingHours.setAvailability')}
       </p>
       <div className="space-y-2">
         {rows.map((row, idx) => (
@@ -510,11 +511,13 @@ function WorkingHoursTab() {
             className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3"
           >
             <div className="w-24 flex-shrink-0">
-              <span className="text-sm font-medium text-[var(--color-text)]">{DAY_LABELS[row.day_of_week]}</span>
+              <span className="text-sm font-medium text-[var(--color-text)]">
+                {t(`settings.workingHours.days.${row.day_of_week}`)}
+              </span>
             </div>
             <label className="flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
               <input type="checkbox" checked={row.is_open} onChange={e => update(idx, { is_open: e.target.checked })} />
-              Open
+              {t('settings.workingHours.open')}
             </label>
             {row.is_open && (
               <>
@@ -525,7 +528,7 @@ function WorkingHoursTab() {
                     onChange={e => update(idx, { open_time: e.target.value + ':00' })}
                     className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-2 py-1 text-sm text-[var(--color-text)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]"
                   />
-                  <span className="text-xs text-[var(--color-text-muted)]">to</span>
+                  <span className="text-xs text-[var(--color-text-muted)]">{t('settings.workingHours.to')}</span>
                   <input
                     type="time"
                     value={(row.close_time ?? '17:00:00').slice(0, 5)}
@@ -534,7 +537,7 @@ function WorkingHoursTab() {
                   />
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)]">
-                  <span>Break:</span>
+                  <span>{t('settings.workingHours.break')}</span>
                   <input
                     type="time"
                     value={(row.break_start ?? '').slice(0, 5)}
@@ -556,11 +559,11 @@ function WorkingHoursTab() {
       </div>
       <div className="flex items-center gap-3">
         <button onClick={handleSave} disabled={saving} className={btnPrimary}>
-          {saving ? 'Saving…' : 'Save hours'}
+          {saving ? t('common.saving') : t('settings.workingHours.saveHours')}
         </button>
         {saved && (
           <span className="flex items-center gap-1 text-sm text-green-600">
-            <Check size={14} /> Saved!
+            <Check size={14} /> {t('common.saved')}
           </span>
         )}
       </div>
@@ -578,6 +581,7 @@ const blockedSchema = z.object({
 type BlockedForm = z.infer<typeof blockedSchema>
 
 function BlockedDatesTab() {
+  const { t } = useTranslation()
   const [blocked, setBlocked] = useState<BlockedDate[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -619,9 +623,9 @@ function BlockedDatesTab() {
   return (
     <div className="space-y-4 max-w-lg">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[var(--color-text-muted)]">Block out holidays or days off.</p>
+        <p className="text-sm text-[var(--color-text-muted)]">{t('settings.blockedDates.blockHolidays')}</p>
         <button onClick={() => setShowForm(s => !s)} className={btnPrimary + ' flex items-center gap-1.5'}>
-          <Plus size={15} /> Add block
+          <Plus size={15} /> {t('settings.blockedDates.addBlock')}
         </button>
       </div>
       {showForm && (
@@ -631,31 +635,31 @@ function BlockedDatesTab() {
         >
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={labelCls}>Start date</label>
+              <label className={labelCls}>{t('settings.blockedDates.startDate')}</label>
               <input {...register('start_date')} type="date" className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>End date</label>
+              <label className={labelCls}>{t('settings.blockedDates.endDate')}</label>
               <input {...register('end_date')} type="date" className={inputCls} />
             </div>
           </div>
           <div>
-            <label className={labelCls}>Reason (optional)</label>
-            <input {...register('reason')} className={inputCls} placeholder="e.g. Public holiday" />
+            <label className={labelCls}>{t('settings.blockedDates.reason')}</label>
+            <input {...register('reason')} className={inputCls} placeholder={t('settings.blockedDates.reasonPlaceholder')} />
           </div>
           <div className="flex gap-3">
             <button type="submit" disabled={isSubmitting} className={btnPrimary}>
-              {isSubmitting ? 'Adding…' : 'Add block'}
+              {isSubmitting ? t('settings.blockedDates.adding') : t('settings.blockedDates.addBlock')}
             </button>
-            <button type="button" onClick={() => setShowForm(false)} className={btnSecondary}>Cancel</button>
+            <button type="button" onClick={() => setShowForm(false)} className={btnSecondary}>{t('common.cancel')}</button>
           </div>
         </form>
       )}
       {loading ? (
-        <p className="text-sm text-[var(--color-text-muted)]">Loading…</p>
+        <p className="text-sm text-[var(--color-text-muted)]">{t('common.loading')}</p>
       ) : blocked.length === 0 ? (
         <div className="rounded-xl border border-dashed border-[var(--color-border)] p-8 text-center text-[var(--color-text-muted)] text-sm">
-          No blocked dates.
+          {t('settings.blockedDates.noBlockedDates')}
         </div>
       ) : (
         <div className="space-y-2">
@@ -687,7 +691,8 @@ function BlockedDatesTab() {
 // ── Main Page ────────────────────────────────────────────────────────────────
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('Profile')
+  const { t } = useTranslation()
+  const [activeTab, setActiveTab] = useState<Tab>('profile')
 
   return (
     <div className="space-y-6">
@@ -703,15 +708,15 @@ export default function SettingsPage() {
                 : 'border-transparent text-[var(--color-text-muted)] hover:text-[var(--color-text)]',
             )}
           >
-            {tab}
+            {t(`settings.tabs.${tab}`)}
           </button>
         ))}
       </div>
       <div>
-        {activeTab === 'Profile'       && <ProfileTab />}
-        {activeTab === 'Services'      && <ServicesTab />}
-        {activeTab === 'Working Hours' && <WorkingHoursTab />}
-        {activeTab === 'Blocked Dates' && <BlockedDatesTab />}
+        {activeTab === 'profile'       && <ProfileTab />}
+        {activeTab === 'services'      && <ServicesTab />}
+        {activeTab === 'workingHours'  && <WorkingHoursTab />}
+        {activeTab === 'blockedDates'  && <BlockedDatesTab />}
       </div>
     </div>
   )

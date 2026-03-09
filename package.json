@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "i18next-scanner": "^4.6.0"
+  },
+  "scripts": {
+    "scan:i18n": "i18next-scanner"
+  }
+}

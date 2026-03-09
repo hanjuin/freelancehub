@@ -1,0 +1,162 @@
+{
+  "nav": {
+    "dashboard": "仪表盘",
+    "bookings": "预约",
+    "customers": "客户",
+    "invoices": "发票",
+    "settings": "设置"
+  },
+  "auth": {
+    "signIn": "登录",
+    "signUp": "注册",
+    "signOut": "退出登录",
+    "createAccount": "创建账户",
+    "signingIn": "登录中…",
+    "creatingAccount": "创建账户中…",
+    "noAccount": "还没有账户？",
+    "alreadyHaveAccount": "已有账户？",
+    "forgotPassword": "忘记密码？",
+    "email": "邮箱",
+    "password": "密码",
+    "firstName": "名",
+    "lastName": "姓",
+    "username": "用户名",
+    "loginFailed": "登录失败",
+    "registrationFailed": "注册失败"
+  },
+  "common": {
+    "loading": "加载中…",
+    "save": "保存",
+    "saving": "保存中…",
+    "saved": "已保存！",
+    "cancel": "取消",
+    "add": "添加",
+    "edit": "编辑",
+    "delete": "删除",
+    "back": "返回",
+    "appearance": "外观",
+    "language": "语言"
+  },
+  "dashboard": {
+    "welcomeBack": "欢迎回来",
+    "happeningToday": "以下是今天的动态。",
+    "todaysBookings": "今日预约",
+    "pendingConfirmations": "待确认",
+    "revenueThisMonth": "本月收入",
+    "outstandingInvoices": "未结发票",
+    "calendarPlaceholder": "日历和最近活动将在此显示。"
+  },
+  "bookings": {
+    "placeholder": "预约日历和列表将在此显示。"
+  },
+  "customers": {
+    "placeholder": "客户列表和CRM将在此显示。"
+  },
+  "invoices": {
+    "placeholder": "发票列表和账单将在此显示。"
+  },
+  "settings": {
+    "tabs": {
+      "profile": "个人资料",
+      "services": "服务",
+      "workingHours": "工作时间",
+      "blockedDates": "封锁日期"
+    },
+    "profile": {
+      "personalInfo": "个人信息",
+      "firstName": "名",
+      "lastName": "姓",
+      "phone": "电话",
+      "businessName": "企业名称",
+      "bio": "简介",
+      "bioPlaceholder": "向客户介绍自己...",
+      "businessCategory": "业务类别",
+      "selectCategory": "— 选择类别 —",
+      "locationLocale": "位置与区域",
+      "addressLine1": "地址第1行",
+      "addressLine2": "地址第2行",
+      "city": "城市",
+      "stateProvince": "省/州",
+      "postcode": "邮政编码",
+      "country": "国家 (ISO 2)",
+      "timezone": "时区",
+      "currency": "货币 (ISO 3)",
+      "saveChanges": "保存更改",
+      "failedToSave": "保存失败"
+    },
+    "services": {
+      "manageServices": "管理您向客户提供的服务。",
+      "addService": "添加服务",
+      "noServices": "暂无服务。添加您的第一个服务以开始。",
+      "notOnline": "不支持在线预约",
+      "editService": "编辑服务",
+      "newService": "新服务",
+      "name": "名称",
+      "description": "描述",
+      "durationMin": "时长（分钟）",
+      "bufferMin": "缓冲（分钟）",
+      "priceCents": "价格（分）— 例如 5000 = $50.00",
+      "colourHex": "颜色（十六进制，可选）",
+      "active": "启用",
+      "bookableOnline": "支持在线预约",
+      "saveService": "保存服务",
+      "deleteConfirm": "删除此服务？",
+      "failedToSave": "保存失败"
+    },
+    "workingHours": {
+      "setAvailability": "设置每周可用时间。客户只能在这些时间内预约。",
+      "open": "开放",
+      "to": "到",
+      "break": "休息：",
+      "saveHours": "保存时间",
+      "days": {
+        "monday": "星期一",
+        "tuesday": "星期二",
+        "wednesday": "星期三",
+        "thursday": "星期四",
+        "friday": "星期五",
+        "saturday": "星期六",
+        "sunday": "星期日"
+      }
+    },
+    "blockedDates": {
+      "blockHolidays": "封锁假期或休息日。",
+      "addBlock": "添加封锁",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "reason": "原因（可选）",
+      "reasonPlaceholder": "例如：公众假期",
+      "adding": "添加中…",
+      "noBlockedDates": "暂无封锁日期。"
+    }
+  },
+  "booking": {
+    "steps": {
+      "service": "服务",
+      "dateTime": "日期和时间",
+      "yourDetails": "您的信息",
+      "confirmed": "已确认"
+    },
+    "chooseService": "选择服务",
+    "noServices": "目前没有可预约的服务。",
+    "pickDateTime": "选择日期和时间",
+    "loadingSlots": "正在加载可用时段…",
+    "noSlots": "此日没有可用时段，请选择其他日期。",
+    "yourDetails": "您的信息",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "邮箱",
+    "phone": "电话（可选）",
+    "notes": "备注（可选）",
+    "notesPlaceholder": "有什么需要告知服务提供者的吗？",
+    "bookingInProgress": "预约中…",
+    "confirmBooking": "确认预约",
+    "bookingConfirmed": "预约已确认！",
+    "confirmationEmail": "您将很快收到确认邮件。",
+    "notFound": "未找到",
+    "notFoundDesc": "此预约页面不存在或已不再活跃。",
+    "poweredBy": "由 FreelanceHub 提供支持",
+    "back": "返回",
+    "bookingFailed": "预约失败，请重试。"
+  }
+}

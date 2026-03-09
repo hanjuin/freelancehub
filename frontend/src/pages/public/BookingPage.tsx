@@ -3,7 +3,9 @@ import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useTranslation } from 'react-i18next'
 import { ChevronLeft, ChevronRight, Check, Calendar, Clock, User } from 'lucide-react'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { publicApi } from '@/api/public'
 import type { PublicProfile } from '@/api/public'
 import type { Service } from '@/types/service'
@@ -35,10 +37,17 @@ const labelCls = 'mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-
 
 // ── Step indicator ────────────────────────────────────────────────────────────
 
-const STEPS = ['Service', 'Date & Time', 'Your Details', 'Confirmed'] as const
 type Step = 0 | 1 | 2 | 3
 
 function StepBar({ step }: { step: Step }) {
+  const { t } = useTranslation()
+  const STEPS = [
+    t('booking.steps.service'),
+    t('booking.steps.dateTime'),
+    t('booking.steps.yourDetails'),
+    t('booking.steps.confirmed'),
+  ]
+
   return (
     <div className="flex items-center justify-center gap-0 mb-8">
       {STEPS.map((label, i) => (
@@ -80,11 +89,13 @@ function ServiceStep({
   currency: string
   onSelect: (s: Service) => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Choose a service</h2>
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('booking.chooseService')}</h2>
       {services.length === 0 ? (
-        <p className="text-sm text-gray-500">No services available for booking at this time.</p>
+        <p className="text-sm text-gray-500">{t('booking.noServices')}</p>
       ) : (
         services.map(s => (
           <button
@@ -131,6 +142,7 @@ function DateTimeStep({
   onSelect: (slot: AvailableSlot) => void
   onBack: () => void
 }) {
+  const { t } = useTranslation()
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
@@ -169,9 +181,9 @@ function DateTimeStep({
   return (
     <div className="space-y-5">
       <button onClick={onBack} className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800">
-        <ChevronLeft size={16} /> Back
+        <ChevronLeft size={16} /> {t('booking.back')}
       </button>
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Pick a date &amp; time</h2>
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('booking.pickDateTime')}</h2>
       <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
         <div className="flex items-center justify-between mb-3">
           <button onClick={prevMonth} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
@@ -222,9 +234,9 @@ function DateTimeStep({
             {formatDateFull(selectedDate)}
           </p>
           {loadingSlots ? (
-            <p className="text-sm text-gray-400">Loading available slots…</p>
+            <p className="text-sm text-gray-400">{t('booking.loadingSlots')}</p>
           ) : slots.length === 0 ? (
-            <p className="text-sm text-gray-400">No available slots on this day. Try another date.</p>
+            <p className="text-sm text-gray-400">{t('booking.noSlots')}</p>
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {slots.map(slot => (
@@ -272,6 +284,7 @@ function DetailsStep({
   submitting: boolean
   error: string | null
 }) {
+  const { t } = useTranslation()
   const { register, handleSubmit, formState: { errors } } = useForm<DetailsForm>({
     resolver: zodResolver(detailsSchema),
   })
@@ -279,9 +292,9 @@ function DetailsStep({
   return (
     <div className="space-y-5">
       <button onClick={onBack} className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800">
-        <ChevronLeft size={16} /> Back
+        <ChevronLeft size={16} /> {t('booking.back')}
       </button>
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Your details</h2>
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('booking.yourDetails')}</h2>
 
       {/* Booking summary */}
       <div className="rounded-xl border border-indigo-100 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/30 p-4 space-y-1">
@@ -305,35 +318,35 @@ function DetailsStep({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={labelCls}>First name</label>
+            <label className={labelCls}>{t('booking.firstName')}</label>
             <input {...register('first_name')} className={inputCls} autoComplete="given-name" />
             {errors.first_name && <p className="mt-1 text-xs text-red-500">{errors.first_name.message}</p>}
           </div>
           <div>
-            <label className={labelCls}>Last name</label>
+            <label className={labelCls}>{t('booking.lastName')}</label>
             <input {...register('last_name')} className={inputCls} autoComplete="family-name" />
             {errors.last_name && <p className="mt-1 text-xs text-red-500">{errors.last_name.message}</p>}
           </div>
         </div>
         <div>
-          <label className={labelCls}>Email</label>
+          <label className={labelCls}>{t('booking.email')}</label>
           <input {...register('email')} type="email" className={inputCls} autoComplete="email" />
           {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
         </div>
         <div>
-          <label className={labelCls}>Phone (optional)</label>
+          <label className={labelCls}>{t('booking.phone')}</label>
           <input {...register('phone')} type="tel" className={inputCls} autoComplete="tel" />
         </div>
         <div>
-          <label className={labelCls}>Notes (optional)</label>
-          <textarea {...register('customer_notes')} rows={2} className={inputCls + ' resize-none'} placeholder="Anything the provider should know?" />
+          <label className={labelCls}>{t('booking.notes')}</label>
+          <textarea {...register('customer_notes')} rows={2} className={inputCls + ' resize-none'} placeholder={t('booking.notesPlaceholder')} />
         </div>
         <button
           type="submit"
           disabled={submitting}
           className="w-full rounded-lg bg-indigo-600 py-3 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transition"
         >
-          {submitting ? 'Booking…' : 'Confirm booking'}
+          {submitting ? t('booking.bookingInProgress') : t('booking.confirmBooking')}
         </button>
       </form>
     </div>
@@ -351,14 +364,16 @@ function ConfirmedStep({
   slot: AvailableSlot
   currency: string
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="text-center space-y-5 py-4">
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
         <Check size={28} className="text-green-600" />
       </div>
       <div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Booking confirmed!</h2>
-        <p className="mt-1 text-sm text-gray-500">You'll receive a confirmation email shortly.</p>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('booking.bookingConfirmed')}</h2>
+        <p className="mt-1 text-sm text-gray-500">{t('booking.confirmationEmail')}</p>
       </div>
       <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 text-left space-y-2 max-w-xs mx-auto">
         <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
@@ -390,6 +405,7 @@ type DetailsFormValues = {
 
 export default function BookingPage() {
   const { username } = useParams<{ username: string }>()
+  const { t } = useTranslation()
 
   const [profile, setProfile] = useState<PublicProfile | null>(null)
   const [loading, setLoading] = useState(true)
@@ -435,7 +451,7 @@ export default function BookingPage() {
       })
       setStep(3)
     } catch (e) {
-      setBookingError(e instanceof Error ? e.message : 'Booking failed. Please try again.')
+      setBookingError(e instanceof Error ? e.message : t('booking.bookingFailed'))
     } finally {
       setSubmitting(false)
     }
@@ -444,7 +460,7 @@ export default function BookingPage() {
   if (loading) {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-        <p className="text-sm text-gray-400">Loading…</p>
+        <p className="text-sm text-gray-400">{t('common.loading')}</p>
       </div>
     )
   }
@@ -453,8 +469,8 @@ export default function BookingPage() {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Not found</h1>
-          <p className="mt-2 text-sm text-gray-500">This booking page doesn't exist or is no longer active.</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('booking.notFound')}</h1>
+          <p className="mt-2 text-sm text-gray-500">{t('booking.notFoundDesc')}</p>
         </div>
       </div>
     )
@@ -465,6 +481,11 @@ export default function BookingPage() {
   return (
     <div className="min-h-dvh bg-gray-50 dark:bg-gray-950 py-8 px-4">
       <div className="mx-auto max-w-lg">
+        {/* Language switcher */}
+        <div className="flex justify-end mb-4">
+          <LanguageSwitcher className="border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800" />
+        </div>
+
         {/* Header */}
         <div className="mb-8 text-center">
           {profile.avatar_url ? (
@@ -523,7 +544,7 @@ export default function BookingPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-gray-400">
-          Powered by FreelanceHub
+          {t('booking.poweredBy')}
         </p>
       </div>
     </div>

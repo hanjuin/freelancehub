@@ -1,7 +1,9 @@
 import { NavLink } from 'react-router-dom'
 import { X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { NAV_ITEMS } from '@/constants/navigation'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { cn } from '@/utils/cn'
 
 interface Props {
@@ -10,6 +12,8 @@ interface Props {
 }
 
 export function Sidebar({ open, onClose }: Props) {
+  const { t } = useTranslation()
+
   return (
     <>
       {/* Mobile backdrop */}
@@ -49,7 +53,7 @@ export function Sidebar({ open, onClose }: Props) {
 
         {/* Nav links */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-          {NAV_ITEMS.map(({ label, path, icon: Icon }) => (
+          {NAV_ITEMS.map(({ labelKey, path, icon: Icon }) => (
             <NavLink
               key={path}
               to={path}
@@ -64,15 +68,18 @@ export function Sidebar({ open, onClose }: Props) {
               }
             >
               <Icon size={18} />
-              {label}
+              {t(labelKey)}
             </NavLink>
           ))}
         </nav>
 
-        {/* Bottom: theme toggle */}
+        {/* Bottom: theme + language */}
         <div className="flex items-center justify-between px-5 py-4 border-t border-[var(--color-border)]">
-          <span className="text-xs text-[var(--color-text-subtle)]">Appearance</span>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-[var(--color-text-subtle)]">{t('common.appearance')}</span>
+            <ThemeToggle />
+          </div>
+          <LanguageSwitcher />
         </div>
       </aside>
     </>

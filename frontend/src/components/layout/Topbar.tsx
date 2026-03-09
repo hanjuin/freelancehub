@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { Menu, LogOut } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { NAV_ITEMS } from '@/constants/navigation'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { useAuth } from '@/context/AuthContext'
 
 interface Props {
@@ -13,6 +15,7 @@ export function Topbar({ onMenuClick }: Props) {
   const { pathname } = useLocation()
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -48,11 +51,12 @@ export function Topbar({ onMenuClick }: Props) {
           <Menu size={20} />
         </button>
         <h1 className="text-base font-semibold text-[var(--color-text)]">
-          {current?.label ?? 'FreelanceHub'}
+          {current ? t(current.labelKey) : 'FreelanceHub'}
         </h1>
       </div>
 
       <div className="flex items-center gap-2">
+        <LanguageSwitcher className="hidden lg:flex" />
         <ThemeToggle className="hidden lg:flex" />
 
         <div ref={menuRef} className="relative">
@@ -77,7 +81,7 @@ export function Topbar({ onMenuClick }: Props) {
                 className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-[var(--color-text-muted)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-danger)] transition-colors"
               >
                 <LogOut size={15} />
-                Sign out
+                {t('auth.signOut')}
               </button>
             </div>
           )}
